@@ -1,0 +1,106 @@
+<template>
+    <lightning-modal-header label={title}></lightning-modal-header>
+    <lightning-modal-body>  
+        
+        <div>
+            Appointment Number: {appointmentNumber}
+            <br/>
+            Organization: {organization}
+            <br/>
+            Date: {appointmentDate}
+            <br/>
+            Time: {appointmentTime}
+            <br/>
+            Location: {location}
+        
+            
+            <template if:true={showChangeLocation}>
+                <div class="slds-m-around_medium">
+                    <lightning-combobox
+                    name="Location"
+                    label="Location"
+                    value={selectedLocation}
+                    placeholder="Select Location"
+                    options={serviceTerritories}
+                    onchange={handleLocationChange} ></lightning-combobox>    
+                    <!-- <p>Selected Value is:<b>{selectedLocation}</b></p> -->
+                </div>
+            </template>  
+            <!-- <br/>
+            Contact: {contactName} -->
+            
+            Phone: {contactPhone}
+            <br/>
+            Email: {contactEmail}
+            <br/>
+            Additional Notes: {additionalInfo}      
+        </div>
+        
+        <br/>
+        
+        <template if:true={assignedStaff}>
+            <div>
+                <!-- Loop through each staff member and display their name -->
+                <div>Assigned: </div>
+                <template for:each={assignedStaff} for:item="staff">
+                    <div key={staff.ServiceResource.Id}>
+                        {staff.ServiceResource.Name} ({staff.ServiceResource.role__c})
+                    </div>
+                </template>
+            </div>
+        </template> 
+
+        
+
+        <!-- <div class= "changeStaff"></div> -->
+        
+        <!-- <div class="changeGuestSpeaker"></div> -->
+
+        <br/>
+        
+        <div class="fc-container">
+            <template if:true={availableFacilitators}>
+                
+                <div>
+                    
+                    <div> Available Facilitators: </div>
+                    <!-- Loop through each staff member and display their name -->
+                    <template for:each={availableFacilitators} for:item="staff">
+                        <div key={staff.id}>
+                            <!-- available facilitator:  -->
+                            <a data-staff-id={staff.id}  data-staff-name={staff.name} onclick = {handleChangeFacilitator}>
+                                {staff.name}
+                            </a>
+                        </div>
+                        
+                    </template>
+                    <div class="changeFacilitator"> </div>
+                </div>
+            </template>    
+    
+            <template if:true={availableGuestSpeakers}>
+                
+                <div>
+                    
+                    <div> Available Guest Speakers: </div>
+                    <!-- Loop through each staff member and display their name -->
+                    <template for:each={availableGuestSpeakers} for:item="staff">
+                        <div key={staff.id}>
+                            <!-- available guest speaker:  -->
+                            <a data-staff-id={staff.id}  data-staff-name={staff.name} onclick = {handleChangeGuestSpeaker}>
+                                {staff.name}
+                            </a>
+                        </div>
+                        
+                    </template>
+                    <div class="changeGuestSpeaker"> </div>
+                </div>
+            </template>  
+        </div>
+          
+
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="OK" onclick={handleOkay}></lightning-button>
+    </lightning-modal-footer>
+</template>

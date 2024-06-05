@@ -1,0 +1,11 @@
+.custom-visual-picker {
+    width: 500px; /* Adjust as needed */
+    height: 300px; /* Adjust as needed */
+    background-color: aqua;
+}
+
+.sm-custom-visual-picker {
+    background-color: brown;
+    width: 800px;
+    height: 100px;
+}

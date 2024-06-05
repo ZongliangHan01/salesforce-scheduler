@@ -1,0 +1,44 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div data-id={serviceTerritoryId}></div>
+    <fieldset class="slds-form-element">
+        <legend class="slds-form-element__legend slds-form-element__label">Select an option</legend>
+        
+            <div class="slds-form-element__control">
+            <template for:each={serviceTerritories} for:item="serviceTerritory">
+                <div  key={serviceTerritory.Id}  class="slds-visual-picker slds-visual-picker_vertical">
+                    <input type="radio" id={serviceTerritory.Id} value={serviceTerritory.Id} name="serviceTerritories" onchange={handleOnChange} />
+                    <label for={serviceTerritory.Id} class="">
+                    <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center ">
+                        <span>
+                        <span class="slds-text-heading_medium slds-m-bottom_x-small">{serviceTerritory.Name}</span>
+                        <span class="slds-text-title">Some optional item description to help the user better understand what this option is about.</span>
+                        </span>
+                    </span>
+                    <span class="slds-icon_container slds-visual-picker__text-check ">
+                        <svg class="slds-icon slds-icon-text-check slds-icon_x-small" aria-hidden="true">
+                            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                        </svg>
+                    </span>   
+                    
+                    </label>
+                </div>
+            </template>
+            </div>
+      </fieldset>
+</template>
+
+
+
+<!-- <template>
+    
+    <lightning-card title="Service Territory List">
+        <lightning-radio-group  name="Service Territory"
+                                label="Radio Group"
+                                options={options}
+                                value={value}
+                                required="true"
+                                type="radio">
+        </lightning-radio-group>
+    </lightning-card>
+    </template> -->
