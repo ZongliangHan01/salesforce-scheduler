@@ -58,7 +58,7 @@ public with sharing class CustomCalendarController {
 
     // assign the staff to the service appointment
     @AuraEnabled(cacheable=false)
-    public static Map<String, Object> assignStaff(String serviceAppointmentId, String facilitatorId, String guestSpeakerId, String serviceTerritoryId) {
+    public static Map<String, Object> assignStaff(String serviceAppointmentId, String facilitatorId, String guestSpeakerId, String roomId, String serviceTerritoryId) {
         Map<String, Object> requestBody = new Map<String, Object>{
             'serviceAppointmentId'=>serviceAppointmentId,
             'serviceAppointment'=> new Map<String, Object>{
@@ -104,6 +104,15 @@ public with sharing class CustomCalendarController {
         if (guestSpeakerId != null) {
             ((List<Map<String, Object>>)requestBody.get('assignedResources')).add(new Map<String, Object>{
                 'serviceResourceId'=>guestSpeakerId,
+                'isRequiredResource'=>'true',
+                'isPrimaryResource'=> 'false'
+            });
+        }
+
+        // Add room resource if roomId is not null
+        if (roomId != null) {
+            ((List<Map<String, Object>>)requestBody.get('assignedResources')).add(new Map<String, Object>{
+                'serviceResourceId'=>roomId,
                 'isRequiredResource'=>'true',
                 'isPrimaryResource'=> 'false'
             });

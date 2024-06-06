@@ -247,17 +247,23 @@ export default class CustomCalendar extends NavigationMixin(LightningElement) {
                     const eventServiceResources = info.event.extendedProps.serviceResources;
                     const facilitators = eventServiceResources.filter(resource => resource.ServiceResource.role__c === 'Facilitator');
                     const guestSpeakers = eventServiceResources.filter(resource => resource.ServiceResource.role__c === 'Guest Speaker');
+                    
+                    // !!!!!!!!
+                    const room = eventServiceResources.filter(resource => resource.ServiceResource.role__c === 'Room');
+                    
                     return {
                         html: `<div class="fc-content data-id=${id}">
                                     <div class="fc-title">${startTime.getHours()}:${startTime.getMinutes()} - ${endTime.getHours()}:${endTime.getMinutes()}</div>
                                     <div class="fc-workTypeGroup">${eventName}</div>
                                     <div class="fc-account">${eventAccount}</div>
                                     <div class="fc-location" data-location-id = ${eventLocationId}> - ${eventLocation} - </div>
+                                    ${Array.isArray(room) ? room.map(room => `<div class="fc-location"> ${room.ServiceResource.Name} </div>`).join(''): ''}
                                     ${Array.isArray(eventAdditionalInfo) ? eventAdditionalInfo.map(info => `<div class="fc-description">${info}</div>`).join(''): ''}
             
                                     ${Array.isArray(facilitators) ? facilitators.map(facilitator => `<div class="fc-assigned"> ${facilitator.ServiceResource.Name} (F)</div>`).join(''): ''}
                                     
                                     ${Array.isArray(guestSpeakers) ? guestSpeakers.map(guestSpeaker => `<div class="fc-assigned"> ${guestSpeaker.ServiceResource.Name} (GS)</div>`).join(''): ''}
+
                                     <div class="fc-description">Phone: ${eventPhone}</div>
                                     <div class="fc-description">Email: ${eventEmail}</div>
                                 </div>`,
@@ -378,15 +384,17 @@ export default class CustomCalendar extends NavigationMixin(LightningElement) {
     // assign staff to the appointment by calling the controller method
     //handleAssignStaff(staffId, locationId, eventId) {
     handleAssignStaff(event) {
-        const { facilitatorId, guestSpeakerId, locationId, eventId } = event.detail;
+        const { facilitatorId, guestSpeakerId, roomId, locationId, eventId } = event.detail;
         console.log('Assign facilitator:', facilitatorId);
         console.log('Assign guest speaker:', guestSpeakerId);
         console.log('LocationId:', locationId);
+        console.log('RoomId:', roomId);
         console.log('EventId:', eventId);
         assignStaff({ 
             serviceAppointmentId: eventId, 
             facilitatorId: facilitatorId,
             guestSpeakerId: guestSpeakerId, 
+            roomId: roomId,
             serviceTerritoryId: locationId 
         })
         .then(result => {

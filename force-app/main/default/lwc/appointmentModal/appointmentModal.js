@@ -32,12 +32,14 @@ export default class AppointmentModal extends LightningModal {
     @api appointmentNumber;
     @api randomString;
 
-    availableStaffs=[];
+    availableStaffs=[];  // for what ?
     availableFacilitators=[];
     availableGuestSpeakers=[];
-    
+    availableRooms=[];
+
     assignedFacilitatorId = null;
     assignedGuestSpeakerId = null;
+    assignedRoomId = null;
     // dataToRefresh;
 
 
@@ -62,20 +64,25 @@ export default class AppointmentModal extends LightningModal {
                 staffs.push(staffObj);
                 console.log(staffObj.role);
             }
-            this.availableStaffs = staffs;
+            this.availableStaffs = staffs;  // ? for what ?
             this.availableFacilitators = staffs.filter(staff => staff.role === 'Facilitator');
             this.availableGuestSpeakers = staffs.filter(staff => staff.role === 'Guest Speaker');
-            
+            this.availableRooms = staffs.filter(staff => staff.role === 'Room');
+
             if (this.appointmentType=='Online' ) {
                 this.showChangeLocation = true;
             }
             // this.dataToRefresh = result;
             
+
+            // initailize the id
             this.assignedStaff.forEach(staff => {
                 if (staff.ServiceResource.role__c === 'Facilitator') {
                     this.assignedFacilitatorId = staff.ServiceResource.Id;
                 } else if (staff.ServiceResource.role__c === 'Guest Speaker') {
                     this.assignedGuestSpeakerId = staff.ServiceResource.Id;
+                } else if (staff.ServiceResource.role__c === 'Room') {
+                    this.assignedRoomId = staff.ServiceResource.Id;
                 }
             });
 
@@ -126,6 +133,7 @@ export default class AppointmentModal extends LightningModal {
             detail: {
                 facilitatorId: this.assignedFacilitatorId,
                 guestSpeakerId: this.assignedGuestSpeakerId,
+                roomId: this.assignedRoomId,
                 locationId: this.locationId,
                 eventId: this.eventId
             }
@@ -144,6 +152,7 @@ export default class AppointmentModal extends LightningModal {
             detail: {
                 guestSpeakerId: this.assignedGuestSpeakerId,
                 facilitatorId: this.assignedFacilitatorId,
+                roomId: this.assignedRoomId, 
                 locationId: this.locationId,
                 eventId: this.eventId
             }
@@ -151,6 +160,29 @@ export default class AppointmentModal extends LightningModal {
         });
         this.changeStaffEvent = event;
     }
+
+    handleChangeRoom(e) {
+        
+        this.assignedRoomId = e.currentTarget.dataset.staffId;
+        console.log('Room:', this.assignedRoomId);
+        const changeRoomDiv = this.template.querySelector('.changeRoom');
+        if (changeRoomDiv) {
+            console.log('Room:', e.currentTarget.dataset.staffName);
+            changeRoomDiv.innerHTML = 'Change Room To: ' + e.currentTarget.dataset.staffName;
+        }
+        const event = new CustomEvent('staffassigned', {
+            detail: {
+                facilitatorId: this.assignedFacilitatorId,
+                guestSpeakerId: this.assignedGuestSpeakerId,
+                roomId: this.assignedRoomId,
+                locationId: this.locationId,
+                eventId: this.eventId
+            }
+
+        });
+        this.changeStaffEvent = event;
+    }    
+
 
 
     @wire(getServiceTerritories)

@@ -12,8 +12,36 @@
             Time: {appointmentTime}
             <br/>
             Location: {location}
-        
+            <br/>
             
+            <template if:true={assignedRoom}>
+                <div>
+                    <!-- Loop through each staff member and display their name -->
+                    <div>Location: </div>
+                    <template for:each={assignedRoom} for:item="room">
+                        <div key={room.ServiceResource.Id}>
+                            {room.ServiceResource.Name} ({room.ServiceResource.role__c})
+                        </div>
+                    </template>
+                </div>
+            </template> 
+
+            <template if:true={availableRooms}>
+                <div> 
+                    <div> Available Rooms: </div>
+                    <!-- Loop through each staff member and display their name -->
+                    <template for:each={availableRooms} for:item="staff">
+                        <div key={staff.id}>
+                            <a data-staff-id={staff.id}  data-staff-name={staff.name} onclick = {handleChangeRoom}>
+                                {staff.name}
+                            </a>
+                        </div>
+                    </template>
+                    <div class="changeRoom"> </div>
+                </div>
+            </template>  
+
+
             <template if:true={showChangeLocation}>
                 <div class="slds-m-around_medium">
                     <lightning-combobox
